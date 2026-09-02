@@ -110,6 +110,40 @@ function TA({ onLogout }) {
     }
   };
 
+  // Delete job
+  const deleteJob = async (id) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this job?"
+    );
+
+    if (!confirmed) return;
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/jobs/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message || "Failed to delete job");
+        return;
+      }
+
+      setJobs((current) =>
+        current.filter((job) => job.id !== id)
+      );
+
+      alert("Job deleted successfully!");
+    } catch (error) {
+      console.error(error);
+      alert("Backend connection failed.");
+    }
+  };
+
   // Update candidate stage
   const updateStage = async (id, stage) => {
     try {
@@ -455,6 +489,13 @@ function TA({ onLogout }) {
                     <p>
                       {job.description}
                     </p>
+
+                    <button
+                      className="small-button"
+                      onClick={() => deleteJob(job.id)}
+                    >
+                      Delete Job
+                    </button>
 
                   </div>
 
