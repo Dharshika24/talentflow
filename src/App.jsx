@@ -19,7 +19,7 @@ import {
 
 import "./App.css";
 
-const API = "http://localhost:5000/api";
+const API = "https://talentflow-hsv0.onrender.com/api";
 
 function HomePage({ onRecruiterLogin, onApply }) {
   const [jobs, setJobs] = useState([]);

@@ -11,7 +11,6 @@ import {
   Settings,
   LogOut,
   Bell,
-  MoreHorizontal,
   UserRound,
   LayoutDashboard,
 } from "lucide-react";
@@ -35,12 +34,8 @@ function TA({ onLogout }) {
   // Get jobs from MySQL
   const loadJobs = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/jobs"
-      );
-
+      const response = await fetch("https://talentflow-hsv0.onrender.com/api/jobs");
       const data = await response.json();
-
       setJobs(data);
     } catch (error) {
       console.error("Jobs error:", error);
@@ -50,12 +45,8 @@ function TA({ onLogout }) {
   // Get applications from MySQL
   const loadApplications = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/applications"
-      );
-
+      const response = await fetch("https://talentflow-hsv0.onrender.com/api/applications");
       const data = await response.json();
-
       setApplications(data);
     } catch (error) {
       console.error("Applications error:", error);
@@ -72,16 +63,13 @@ function TA({ onLogout }) {
     e.preventDefault();
 
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/jobs",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(jobForm),
-        }
-      );
+      const response = await fetch("https://talentflow-hsv0.onrender.com/api/jobs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(jobForm),
+      });
 
       const data = await response.json();
 
@@ -102,7 +90,6 @@ function TA({ onLogout }) {
       });
 
       await loadJobs();
-
       setPage("jobs");
     } catch (error) {
       console.error(error);
@@ -112,19 +99,13 @@ function TA({ onLogout }) {
 
   // Delete job
   const deleteJob = async (id) => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this job?"
-    );
-
+    const confirmed = window.confirm("Are you sure you want to delete this job?");
     if (!confirmed) return;
 
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/jobs/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`https://talentflow-hsv0.onrender.com/api/jobs/${id}`, {
+        method: "DELETE",
+      });
 
       const data = await response.json();
 
@@ -133,10 +114,7 @@ function TA({ onLogout }) {
         return;
       }
 
-      setJobs((current) =>
-        current.filter((job) => job.id !== id)
-      );
-
+      setJobs((current) => current.filter((job) => job.id !== id));
       alert("Job deleted successfully!");
     } catch (error) {
       console.error(error);
@@ -147,16 +125,13 @@ function TA({ onLogout }) {
   // Update candidate stage
   const updateStage = async (id, stage) => {
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/applications/${id}/stage`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ stage }),
-        }
-      );
+      const response = await fetch(`https://talentflow-hsv0.onrender.com/api/applications/${id}/stage`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ stage }),
+      });
 
       if (!response.ok) {
         alert("Could not update candidate.");
@@ -165,9 +140,7 @@ function TA({ onLogout }) {
 
       setApplications((current) =>
         current.map((candidate) =>
-          candidate.id === id
-            ? { ...candidate, stage }
-            : candidate
+          candidate.id === id ? { ...candidate, stage } : candidate
         )
       );
     } catch (error) {
@@ -175,36 +148,22 @@ function TA({ onLogout }) {
     }
   };
 
-  const screening = applications.filter(
-    (a) => a.stage === "Screening"
-  ).length;
-
-  const shortlisted = applications.filter(
-    (a) => a.stage === "Shortlisted"
-  ).length;
-
-  const interviews = applications.filter(
-    (a) => a.stage === "Interview"
-  ).length;
+  const screening = applications.filter((a) => a.stage === "Screening").length;
+  const shortlisted = applications.filter((a) => a.stage === "Shortlisted").length;
+  const interviews = applications.filter((a) => a.stage === "Interview").length;
 
   return (
     <div className="dashboard">
-
       {/* SIDEBAR */}
-
       <aside className="sidebar">
-
         <div className="dashboard-logo">
           <Briefcase size={24} />
           <span>TalentFlow</span>
         </div>
 
-        <div className="sidebar-label">
-          RECRUITMENT
-        </div>
+        <div className="sidebar-label">RECRUITMENT</div>
 
         <nav className="sidebar-nav">
-
           <button
             onClick={() => setPage("dashboard")}
             className={page === "dashboard" ? "active" : ""}
@@ -252,11 +211,9 @@ function TA({ onLogout }) {
             <BarChart3 size={18} />
             Analytics
           </button>
-
         </nav>
 
         <div className="sidebar-bottom">
-
           <button>
             <Settings size={18} />
             Settings
@@ -268,43 +225,27 @@ function TA({ onLogout }) {
           </button>
 
           <div className="recruiter-profile">
-
-            <div className="avatar">
-              HR
-            </div>
-
+            <div className="avatar">HR</div>
             <div>
               <strong>HR Recruiter</strong>
               <small>Talent Acquisition</small>
             </div>
-
           </div>
-
         </div>
-
       </aside>
 
-
       {/* MAIN */}
-
       <main className="dashboard-main">
-
         {/* DASHBOARD */}
-
         {page === "dashboard" && (
-
           <>
             <div className="dashboard-header">
-
               <div>
                 <h1>Recruitment Dashboard</h1>
-                <p>
-                  Overview of your hiring activity
-                </p>
+                <p>Overview of your hiring activity</p>
               </div>
 
               <div className="header-actions">
-
                 <div className="dashboard-search">
                   <Search size={16} />
                   <input placeholder="Search..." />
@@ -313,82 +254,59 @@ function TA({ onLogout }) {
                 <button className="icon-button">
                   <Bell size={17} />
                 </button>
-
               </div>
-
             </div>
 
-
             <div className="stats-grid">
-
               <div className="stat-card">
                 <div className="stat-top">
                   <span>Total Jobs</span>
                   <Briefcase size={17} />
                 </div>
-
                 <h2>{jobs.length}</h2>
-
                 <p>Available positions</p>
               </div>
-
 
               <div className="stat-card">
                 <div className="stat-top">
                   <span>Total Applications</span>
                   <Users size={17} />
                 </div>
-
                 <h2>{applications.length}</h2>
-
                 <p>Current applications</p>
               </div>
-
 
               <div className="stat-card">
                 <div className="stat-top">
                   <span>Shortlisted</span>
                   <UserRound size={17} />
                 </div>
-
                 <h2>{shortlisted}</h2>
-
                 <p>Selected candidates</p>
               </div>
-
 
               <div className="stat-card">
                 <div className="stat-top">
                   <span>Interviews</span>
                   <CalendarDays size={17} />
                 </div>
-
                 <h2>{interviews}</h2>
-
                 <p>Scheduled interviews</p>
               </div>
-
             </div>
 
-
             <div className="dashboard-card">
-
               <div className="card-header">
-
                 <div>
                   <h2>Recruitment Pipeline</h2>
                   <p>Candidate movement by stage</p>
                 </div>
-
               </div>
 
               <div className="pipeline">
-
                 <div className="pipeline-stage">
                   <span>Applied</span>
-                  <strong>
-                    {applications.length}
-                  </strong>
+                  <strong>{applications.length}</strong>
                 </div>
 
                 <div className="pipeline-stage">
@@ -405,75 +323,42 @@ function TA({ onLogout }) {
                   <span>Interview</span>
                   <strong>{interviews}</strong>
                 </div>
-
               </div>
-
             </div>
           </>
         )}
 
-
         {/* JOBS */}
-
         {page === "jobs" && (
-
           <div className="dashboard-card">
-
             <div className="card-header">
-
               <div>
                 <h2>Jobs</h2>
-
-                <p>
-                  Manage recruitment opportunities
-                </p>
+                <p>Manage recruitment opportunities</p>
               </div>
 
-              <button
-                className="search-button"
-                onClick={() => setPage("create-job")}
-              >
+              <button className="search-button" onClick={() => setPage("create-job")}>
                 + Create New Job
               </button>
-
             </div>
 
-
             {jobs.length === 0 ? (
-
               <div className="empty-candidates">
-
                 <Briefcase size={30} />
-
-                <p>
-                  No jobs found.
-                </p>
-
+                <p>No jobs found.</p>
               </div>
-
             ) : (
-
               jobs.map((job) => (
-
-                <div
-                  key={job.id}
-                  className="job-card"
-                >
-
+                <div key={job.id} className="job-card">
                   <div className="job-icon">
                     <Briefcase size={24} />
                   </div>
 
                   <div className="job-info">
-
-                    <div className="job-type">
-                      {job.employment_type}
-                    </div>
-
+                    <div className="job-type">{job.employment_type}</div>
                     <h3>{job.title}</h3>
 
                     <div className="job-details">
-
                       <span>
                         <Building2 size={15} />
                         {job.department || "General"}
@@ -483,105 +368,58 @@ function TA({ onLogout }) {
                         <MapPin size={15} />
                         {job.location}
                       </span>
-
                     </div>
 
-                    <p>
-                      {job.description}
-                    </p>
+                    <p>{job.description}</p>
 
-                    <button
-                      className="small-button"
-                      onClick={() => deleteJob(job.id)}
-                    >
+                    <button className="small-button" onClick={() => deleteJob(job.id)}>
                       Delete Job
                     </button>
-
                   </div>
-
                 </div>
-
               ))
             )}
-
           </div>
         )}
 
-
         {/* CREATE JOB */}
-
         {page === "create-job" && (
-
           <div className="dashboard-card">
-
             <div className="card-header">
-
               <div>
                 <h2>Create New Job</h2>
-
-                <p>
-                  Publish a new opportunity
-                </p>
+                <p>Publish a new opportunity</p>
               </div>
 
-              <button
-                className="small-button"
-                onClick={() => setPage("jobs")}
-              >
+              <button className="small-button" onClick={() => setPage("jobs")}>
                 ← Back
               </button>
-
             </div>
 
-
-            <form
-              className="job-form"
-              onSubmit={createJob}
-            >
-
+            <form className="job-form" onSubmit={createJob}>
               <input
                 placeholder="Job Title *"
                 value={jobForm.title}
-                onChange={(e) =>
-                  setJobForm({
-                    ...jobForm,
-                    title: e.target.value,
-                  })
-                }
+                onChange={(e) => setJobForm({ ...jobForm, title: e.target.value })}
                 required
               />
 
               <input
                 placeholder="Department"
                 value={jobForm.department}
-                onChange={(e) =>
-                  setJobForm({
-                    ...jobForm,
-                    department: e.target.value,
-                  })
-                }
+                onChange={(e) => setJobForm({ ...jobForm, department: e.target.value })}
               />
 
               <input
                 placeholder="Location *"
                 value={jobForm.location}
-                onChange={(e) =>
-                  setJobForm({
-                    ...jobForm,
-                    location: e.target.value,
-                  })
-                }
+                onChange={(e) => setJobForm({ ...jobForm, location: e.target.value })}
                 required
               />
 
               <select
                 value={jobForm.employment_type}
-                onChange={(e) =>
-                  setJobForm({
-                    ...jobForm,
-                    employment_type: e.target.value,
-                  })
-                }
+                onChange={(e) => setJobForm({ ...jobForm, employment_type: e.target.value })}
               >
                 <option>Full-time</option>
                 <option>Part-time</option>
@@ -593,12 +431,7 @@ function TA({ onLogout }) {
                 placeholder="Job Description *"
                 rows="6"
                 value={jobForm.description}
-                onChange={(e) =>
-                  setJobForm({
-                    ...jobForm,
-                    description: e.target.value,
-                  })
-                }
+                onChange={(e) => setJobForm({ ...jobForm, description: e.target.value })}
                 required
               />
 
@@ -606,81 +439,44 @@ function TA({ onLogout }) {
                 placeholder="Requirements — React, SQL, Excel"
                 rows="4"
                 value={jobForm.requirements}
-                onChange={(e) =>
-                  setJobForm({
-                    ...jobForm,
-                    requirements: e.target.value,
-                  })
-                }
+                onChange={(e) => setJobForm({ ...jobForm, requirements: e.target.value })}
               />
 
-              <button
-                type="submit"
-                className="search-button"
-              >
+              <button type="submit" className="search-button">
                 Create Job
               </button>
-
             </form>
-
           </div>
         )}
 
-
         {/* CANDIDATES */}
-
         {page === "candidates" && (
-
           <div className="dashboard-card">
-
             <div className="card-header">
               <div>
                 <h2>Candidates</h2>
-                <p>
-                  Manage candidate applications
-                </p>
+                <p>Manage candidate applications</p>
               </div>
             </div>
 
             {applications.map((candidate) => (
-
-              <div
-                className="candidate-row"
-                key={candidate.id}
-              >
-
+              <div className="candidate-row" key={candidate.id}>
                 <div className="candidate-name">
-
                   <div className="candidate-avatar">
-                    {candidate.name
-                      ?.substring(0, 2)
-                      .toUpperCase()}
+                    {candidate.name?.substring(0, 2).toUpperCase()}
                   </div>
 
                   <div>
-                    <strong>
-                      {candidate.name}
-                    </strong>
-
-                    <small>
-                      {candidate.email}
-                    </small>
+                    <strong>{candidate.name}</strong>
+                    <small>{candidate.email}</small>
                   </div>
-
                 </div>
 
-                <span>
-                  {candidate.job_title || "—"}
-                </span>
+                <span>{candidate.job_title || "—"}</span>
 
                 <select
                   value={candidate.stage || "Applied"}
-                  onChange={(e) =>
-                    updateStage(
-                      candidate.id,
-                      e.target.value
-                    )
-                  }
+                  onChange={(e) => updateStage(candidate.id, e.target.value)}
                 >
                   <option>Applied</option>
                   <option>Screening</option>
@@ -689,64 +485,35 @@ function TA({ onLogout }) {
                   <option>Selected</option>
                   <option>Rejected</option>
                 </select>
-
               </div>
-
             ))}
-
           </div>
         )}
-
 
         {/* APPLICATIONS */}
-
         {page === "applications" && (
-
           <div className="dashboard-card">
-
             <h2>Applications</h2>
-
-            <p>
-              Total applications: {applications.length}
-            </p>
-
+            <p>Total applications: {applications.length}</p>
           </div>
         )}
-
 
         {/* INTERVIEWS */}
-
         {page === "interviews" && (
-
           <div className="dashboard-card">
-
             <h2>Interviews</h2>
-
-            <p>
-              Interview management will be added next.
-            </p>
-
+            <p>Interview management will be added next.</p>
           </div>
         )}
-
 
         {/* ANALYTICS */}
-
         {page === "analytics" && (
-
           <div className="dashboard-card">
-
             <h2>Analytics</h2>
-
-            <p>
-              Recruitment analytics will be added next.
-            </p>
-
+            <p>Recruitment analytics will be added next.</p>
           </div>
         )}
-
       </main>
-
     </div>
   );
 }
